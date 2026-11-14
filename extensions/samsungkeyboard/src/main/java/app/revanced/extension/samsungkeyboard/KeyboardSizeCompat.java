@@ -10,7 +10,7 @@ public final class KeyboardSizeCompat {
     // Default phone landscape width ratio (base width * 1.6 = keyboard width in landscape).
     private static final float PHONE_LANDSCAPE_WIDTH_RATIO = 1.6f;
     // Default phone landscape height ratio (base height * 0.64 = keyboard height in landscape).
-    private static final float PHONE_LANDSCAPE_HEIGHT_RATIO = 0.64f;
+    private static final float PHONE_LANDSCAPE_HEIGHT_RATIO = 0.5f;
     private static final float LARGE_SCREEN_MIN_WIDTH_DP = 600f;
 
     private static volatile boolean resolved;
