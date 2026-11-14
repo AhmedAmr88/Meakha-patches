@@ -9,6 +9,8 @@ public final class KeyboardSizeCompat {
     private static final float HEIGHT_SCALE = 0.85f;
     // Default phone landscape width ratio (base width * 1.6 = keyboard width in landscape).
     private static final float PHONE_LANDSCAPE_WIDTH_RATIO = 1.6f;
+    // Default phone landscape height ratio (base height * 0.64 = keyboard height in landscape).
+    private static final float PHONE_LANDSCAPE_HEIGHT_RATIO = 0.64f;
     private static final float LARGE_SCREEN_MIN_WIDTH_DP = 600f;
 
     private static volatile boolean resolved;
@@ -32,13 +34,19 @@ public final class KeyboardSizeCompat {
             float density = metrics.density;
             if (density <= 0f || basis / density < LARGE_SCREEN_MIN_WIDTH_DP) return size;
 
+            boolean landscape = metrics.widthPixels > metrics.heightPixels;
+
             if (resourceId == phoneHeightId) {
-                return Math.min(size, basis * largeFraction * HEIGHT_SCALE);
+                float height = basis * largeFraction * HEIGHT_SCALE;
+                // Landscape: the phone layout shrinks the height to 0.64x. Undo that so the
+                // keyboard is as tall as in portrait.
+                if (landscape) height /= PHONE_LANDSCAPE_HEIGHT_RATIO;
+                return Math.min(size, height);
             }
 
             // Landscape: the phone layout makes the keyboard 1.6x the base width, which is wider
             // than a near-square inner screen and cuts off keys on both sides.
-            if (metrics.widthPixels > metrics.heightPixels) {
+            if (landscape) {
                 return Math.min(size, metrics.widthPixels / PHONE_LANDSCAPE_WIDTH_RATIO);
             }
             return size;
